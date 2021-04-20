@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "fap-function-store" {
-  name     = "fap-function-store"
+  name     = "fap-backend-application"
   location = var.azure_location
 }
 
@@ -11,7 +11,7 @@ resource "random_id" "app_service_plan_name" {
   byte_length = 2
 }
 
-resource "azurerm_storage_account" "backend-application-storage-account" {
+resource "azurerm_storage_account" "fap-backend-application-storage-account" {
   name                     = random_id.storage_name.id
   resource_group_name      = azurerm_resource_group.fap-function-store.name
   location                 = azurerm_resource_group.fap-function-store.location
@@ -19,22 +19,22 @@ resource "azurerm_storage_account" "backend-application-storage-account" {
   account_replication_type = "LRS"
 }
 
-resource "azurerm_storage_container" "backend-application-storage-container" {
+resource "azurerm_storage_container" "fap-backend-application-storage-container" {
   name                  = "function-storage-container"
-  storage_account_name  = azurerm_storage_account.backend-application-storage-account.name
+  storage_account_name  = azurerm_storage_account.fap-backend-application-storage-account.name
   container_access_type = "private"
 }
 
-resource "azurerm_storage_blob" "backend-storage-blob" {
+resource "azurerm_storage_blob" "fap-backend-application-storage-blob" {
   name                   = "friends-and-places-server.zip"
-  storage_account_name   = azurerm_storage_account.backend-application-storage-account.name
-  storage_container_name = azurerm_storage_container.backend-application-storage-container.name
+  storage_account_name   = azurerm_storage_account.fap-backend-application-storage-account.name
+  storage_container_name = azurerm_storage_container.fap-backend-application-storage-container.name
   type                   = "Block"
   source                 = var.function_zip_path
 }
 
-data "azurerm_storage_account_sas" "backend-storage-shared-access-signature-token" {
-  connection_string = azurerm_storage_account.backend-application-storage-account.primary_connection_string
+data "azurerm_storage_account_sas" "fap-backend-application-storage-account-sas" {
+  connection_string = azurerm_storage_account.fap-backend-application-storage-account.primary_connection_string
   https_only        = true
 
   resource_types {
@@ -65,7 +65,7 @@ data "azurerm_storage_account_sas" "backend-storage-shared-access-signature-toke
   }
 }
 
-resource "azurerm_app_service_plan" "fap-application-service-plan" {
+resource "azurerm_app_service_plan" "fap-backend-application-service-plan" {
   name                = random_id.app_service_plan_name.id
   location            = azurerm_resource_group.fap-function-store.location
   resource_group_name = azurerm_resource_group.fap-function-store.name
@@ -76,19 +76,19 @@ resource "azurerm_app_service_plan" "fap-application-service-plan" {
   }
 }
 
-resource "azurerm_function_app" "fap-function" {
+resource "azurerm_function_app" "fap-backend-application-function" {
   name                       = var.azure_function_app_name
   location                   = azurerm_resource_group.fap-function-store.location
   resource_group_name        = azurerm_resource_group.fap-function-store.name
-  app_service_plan_id        = azurerm_app_service_plan.fap-application-service-plan.id
-  storage_account_name       = azurerm_storage_account.backend-application-storage-account.name
-  storage_account_access_key = azurerm_storage_account.backend-application-storage-account.primary_access_key
+  app_service_plan_id        = azurerm_app_service_plan.fap-backend-application-service-plan.id
+  storage_account_name       = azurerm_storage_account.fap-backend-application-storage-account.name
+  storage_account_access_key = azurerm_storage_account.fap-backend-application-storage-account.primary_access_key
   version                    = "~3"
   app_settings = {
     FUNCTIONS_WORKER_RUNTIME = "dotnet"
     FUNCTION_APP_EDIT_MODE   = "readonly"
     https_only               = true
     HASH                     = filebase64sha256(var.function_zip_path)
-    WEBSITE_RUN_FROM_PACKAGE = "https://${azurerm_storage_account.backend-application-storage-account.name}.blob.core.windows.net/${azurerm_storage_container.backend-application-storage-container.name}/${azurerm_storage_blob.backend-storage-blob.name}${data.azurerm_storage_account_sas.backend-storage-shared-access-signature-token.sas}"
+    WEBSITE_RUN_FROM_PACKAGE = "https://${azurerm_storage_account.fap-backend-application-storage-account.name}.blob.core.windows.net/${azurerm_storage_container.fap-backend-application-storage-container.name}/${azurerm_storage_blob.fap-backend-application-storage-blob.name}${data.azurerm_storage_account_sas.fap-backend-application-storage-account-sas.sas}"
   }
 }
