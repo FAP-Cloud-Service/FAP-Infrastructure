@@ -1,4 +1,5 @@
 variable "azure_location" {}
+variable "azure_resource_groups" {}
 
 variable "azure_resource_group_name" {
   description = "Azure resource group name"
