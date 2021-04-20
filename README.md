@@ -8,4 +8,4 @@ Requirements:
     
 Die Variablen können der App-Registrierung in Azure entnommen werden.
 
-Für die Ausführung der Terraform-Konfiguraiton muss die Installierte Version `>= 0.14 sein`
+Für die Ausführung der Terraform-Konfiguraiton muss die installierte Version `>= 0.14` sein.
