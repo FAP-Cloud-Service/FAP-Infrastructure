@@ -5,6 +5,7 @@ Requirements:
   * `ARM_CLIENT_SECRET`
   * `ARM_SUBSCRIPTION_ID`
   * `ARM_TENANT_ID`
+  * `TF_VAR_google_api_key`
     
 Die Variablen können der App-Registrierung in Azure entnommen werden.
 
