@@ -30,7 +30,7 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       run: |
         terraform init
-        terraform plan -input=false -out=plan.tfplan
+        terraform plan -input=false -var="google_api_key=${{ secrets.TF_VAR_google_api_key }}" -out=plan.tfplan
 
     - name: Upload terraform plan file
       uses: actions/upload-artifact@v2
@@ -71,4 +71,4 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       run: |
         terraform init
-        terraform apply -input=false -auto-approve plan.tfplan
+        terraform apply -input=false -var="google_api_key=${{ secrets.TF_VAR_google_api_key }}" -auto-approve -lock-timeout=10s plan.tfplan
