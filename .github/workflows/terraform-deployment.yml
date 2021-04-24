@@ -30,7 +30,14 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       run: |
         terraform init
-        terraform plan -input=false
+        terraform plan -input=false -out=plan.tfplan
+
+    - name: Upload terraform plan file
+      uses: actions/upload-artifact@v2
+      with:
+        name: plan.tfplan
+        path: plan.tfplan
+        retention-days: 2
 
   deploy:
     name: Terraform apply
@@ -51,6 +58,11 @@ jobs:
     - name: Download backend zip
       run: curl -sLO https://github.com/fap-cloud-service/fap-backend/releases/latest/download/friends-and-places-server.zip
 
+    - name: Download terraform plan file
+      uses: actions/download-artifact@v2
+      with:
+        name: plan.tfplan
+
     - name: Terraform init and apply
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -59,4 +71,4 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       run: |
         terraform init
-        terraform apply -input=false -auto-approve
+        terraform apply -input=false -auto-approve plan.tfplan
