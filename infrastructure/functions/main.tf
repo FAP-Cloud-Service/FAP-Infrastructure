@@ -85,10 +85,12 @@ resource "azurerm_function_app" "fap-backend-application-function" {
   storage_account_access_key = azurerm_storage_account.fap-backend-application-storage-account.primary_access_key
   version                    = "~3"
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME = "dotnet"
-    FUNCTION_APP_EDIT_MODE   = "readonly"
-    https_only               = true
-    HASH                     = filebase64sha256(var.function_zip_path)
-    WEBSITE_RUN_FROM_PACKAGE = "https://${azurerm_storage_account.fap-backend-application-storage-account.name}.blob.core.windows.net/${azurerm_storage_container.fap-backend-application-storage-container.name}/${azurerm_storage_blob.fap-backend-application-storage-blob.name}${data.azurerm_storage_account_sas.fap-backend-application-storage-account-sas.sas}"
+    GOOGLE_API_KEY             = var.google_api_key
+    DATABASE_CONNECTION_STRING = azurerm_storage_account.fap-backend-application-storage-account.primary_connection_string
+    FUNCTIONS_WORKER_RUNTIME   = "dotnet"
+    FUNCTION_APP_EDIT_MODE     = "readonly"
+    https_only                 = true
+    HASH                       = filebase64sha256(var.function_zip_path)
+    WEBSITE_RUN_FROM_PACKAGE   = "https://${azurerm_storage_account.fap-backend-application-storage-account.name}.blob.core.windows.net/${azurerm_storage_container.fap-backend-application-storage-container.name}/${azurerm_storage_blob.fap-backend-application-storage-blob.name}${data.azurerm_storage_account_sas.fap-backend-application-storage-account-sas.sas}"
   }
 }

@@ -1,0 +1,74 @@
+name: Terraform deployment
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  plan:
+    name: Terraform plan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.15.0
+
+    - name: Download backend zip
+      run: curl -sLO https://github.com/fap-cloud-service/fap-backend/releases/latest/download/friends-and-places-server.zip
+
+    - name: Terraform init and plan
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      run: |
+        terraform init
+        terraform plan -input=false -var="google_api_key=${{ secrets.TF_VAR_google_api_key }}" -out=plan.tfplan
+
+    - name: Upload terraform plan file
+      uses: actions/upload-artifact@v2
+      with:
+        name: plan.tfplan
+        path: plan.tfplan
+        retention-days: 2
+
+  deploy:
+    name: Terraform apply
+
+    runs-on: ubuntu-latest
+    environment: production
+    needs: plan
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.15.0
+
+    - name: Download backend zip
+      run: curl -sLO https://github.com/fap-cloud-service/fap-backend/releases/latest/download/friends-and-places-server.zip
+
+    - name: Download terraform plan file
+      uses: actions/download-artifact@v2
+      with:
+        name: plan.tfplan
+
+    - name: Terraform init and apply
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      run: |
+        terraform init
+        terraform apply -input=false -auto-approve -lock-timeout=10s plan.tfplan
