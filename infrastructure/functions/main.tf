@@ -2,7 +2,6 @@ resource "azurerm_resource_group" "fap-function-store" {
   name     = "fap-backend-application"
   location = var.azure_location
 }
-
 resource "random_id" "storage_name" {
   byte_length = 2
 }

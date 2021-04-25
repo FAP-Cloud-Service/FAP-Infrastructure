@@ -1,2 +1,2 @@
-variable "prod-resource-group-name" {}
+variable "prod-resource-group" {}
 variable "azure_location" {}

@@ -6,6 +6,12 @@ module "functions" {
 
 module "kubernetes" {
   source = "./kubernetes"
-  prod-resource-group-name = module.functions.prod-resource-group-name
-  azure_location = var.azure_location
+  prod-resource-group = module.functions.prod-resource-group
+  azure_location      = var.azure_location
+}
+
+module "secrets" {
+  source = "./secrets"
+  prod-resource-group    = module.functions.prod-resource-group
+  fap-kubernetes-secrets = module.kubernetes.fap-kubernetes-secrets
 }
