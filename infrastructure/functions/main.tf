@@ -3,14 +3,6 @@ resource "azurerm_resource_group" "fap-backend-resource-group" {
   location = var.azure_location
 }
 
-resource "random_id" "storage_name" {
-  byte_length = 2
-}
-
-resource "random_id" "app_service_plan_name" {
-  byte_length = 2
-}
-
 resource "azurerm_storage_account" "fap-backend-storage-account" {
   name                     = "fapbackendstorageaccount"
   resource_group_name      = azurerm_resource_group.fap-backend-resource-group.name

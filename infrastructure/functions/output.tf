@@ -1,3 +1,3 @@
-output "prod-resource-group" {
-  value = azurerm_resource_group.fap-function-store
+output "prod_resource_group" {
+  value = azurerm_resource_group.fap-backend-resource-group
 }

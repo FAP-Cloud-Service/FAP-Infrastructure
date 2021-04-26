@@ -7,12 +7,14 @@ module "functions" {
 
 module "kubernetes" {
   source = "./kubernetes"
-  prod-resource-group = module.functions.prod-resource-group
+  prod_resource_group = module.functions.prod_resource_group
   azure_location      = var.azure_location
+  azure_tags     = var.azure_tags
 }
 
 module "secrets" {
   source = "./secrets"
-  prod-resource-group    = module.functions.prod-resource-group
-  fap-kubernetes-secrets = module.kubernetes.fap-kubernetes-secrets
+  prod_resource_group    = module.functions.prod_resource_group
+  fap_kubernetes_secrets = module.kubernetes.fap_kubernetes_secrets
+  azure_tags     = var.azure_tags
 }

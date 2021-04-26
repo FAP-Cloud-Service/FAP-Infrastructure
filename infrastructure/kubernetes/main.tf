@@ -1,7 +1,7 @@
 resource "azurerm_kubernetes_cluster" "fap-frontend-application-kubernetes-cluster" {
   name                = "fap-frontend-application"
   location            = var.azure_location
-  resource_group_name = var.prod-resource-group.name
+  resource_group_name = var.prod_resource_group.name
   dns_prefix          = "fap-server"
   node_resource_group = "fap-frontend-application"
 
@@ -18,7 +18,5 @@ resource "azurerm_kubernetes_cluster" "fap-frontend-application-kubernetes-clust
     type = "SystemAssigned"
   }
 
-  tags = {
-    tfmanaged = "true"
-  }
+  tags = var.azure_tags
 }

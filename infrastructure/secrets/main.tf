@@ -2,19 +2,17 @@ data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "fap-key-vault" {
   name                       = "fap-key-vault"
-  location                   = var.prod-resource-group.location
-  resource_group_name        = var.prod-resource-group.name
+  location                   = var.prod_resource_group.location
+  resource_group_name        = var.prod_resource_group.name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
   soft_delete_retention_days = 7
   enabled_for_deployment     = true
-  tags = {
-    tfmanaged = "true"
-  }
+  tags                       = var.azure_tags
 }
 
 data "azuread_users" "users" {
-  user_principal_names = var.azure-user
+  user_principal_names = var.azure_user
 }
 
 resource "azurerm_key_vault_access_policy" "fap-user-access-policy" {
@@ -38,11 +36,9 @@ resource "azurerm_key_vault_access_policy" "fap-user-access-policy" {
 }
 
 resource "azurerm_key_vault_secret" "kubernetes-secret" {
-  for_each     = var.fap-kubernetes-secrets
+  for_each     = var.fap_kubernetes_secrets
   name         = each.key
   value        = each.value
   key_vault_id = azurerm_key_vault.fap-key-vault.id
-  tags = {
-    tfmanaged = "true"
-  }
+  tags = var.azure_tags
 }
