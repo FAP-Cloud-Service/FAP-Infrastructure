@@ -12,7 +12,7 @@ resource "azurerm_key_vault" "fap-key-vault" {
 }
 
 data "azuread_users" "users" {
-  user_principal_names = var.azure_user
+  user_principal_names = var.azure_users
 }
 
 resource "azurerm_key_vault_access_policy" "fap-user-access-policy" {
