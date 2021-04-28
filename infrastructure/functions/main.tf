@@ -67,8 +67,8 @@ resource "azurerm_app_service_plan" "fap-backend-service-plan" {
 
 resource "azurerm_function_app" "fap-backend-function-app" {
   name                       = "fap-backend-function-app"
-  location                   = var.prod_resource_group.fap-backend-resource-group.location
-  resource_group_name        = var.prod_resource_group.fap-backend-resource-group.name
+  location                   = var.prod_resource_group.location
+  resource_group_name        = var.prod_resource_group.name
   app_service_plan_id        = azurerm_app_service_plan.fap-backend-service-plan.id
   storage_account_name       = azurerm_storage_account.fap-backend-storage-account.name
   storage_account_access_key = azurerm_storage_account.fap-backend-storage-account.primary_access_key
