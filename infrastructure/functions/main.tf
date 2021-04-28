@@ -56,7 +56,7 @@ data "azurerm_storage_account_sas" "fap-backend-storage-account-sas" {
 resource "azurerm_app_service_plan" "fap-backend-service-plan" {
   name                = "fap-backend-service-plan"
   location            = var.prod_resource_group.location
-  resource_group_name = var.prod_resource_group.fap-backend-resource-group.name
+  resource_group_name = var.prod_resource_group.name
   kind                = "functionapp"
   tags = var.azure_tags
   sku {
