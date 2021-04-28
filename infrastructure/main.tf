@@ -8,7 +8,7 @@ module "functions" {
 
 module "kubernetes" {
   source = "./kubernetes"
-  prod_resource_group = azurerm_resource_group.fap-backend-resource-group
+  prod_resource_group = azurerm_resource_group.fap-prod-resource-group
   azure_location      = var.azure_location
   azure_tags     = var.azure_tags
 }
