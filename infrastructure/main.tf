@@ -15,7 +15,7 @@ module "kubernetes" {
 
 module "secrets" {
   source = "./secrets"
-  prod_resource_group    = azurerm_resource_group.fap-backend-resource-group
+  prod_resource_group    = azurerm_resource_group.fap-prod-resource-group
   fap_kubernetes_secrets = module.kubernetes.fap_kubernetes_secrets
   azure_tags     = var.azure_tags
 }
