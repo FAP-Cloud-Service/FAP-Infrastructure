@@ -1,6 +1,6 @@
 module "functions" {
   source         = "./functions"
-  prod_resource_group = azurerm_resource_group.fap-backend-resource-group
+  prod_resource_group = azurerm_resource_group.fap-prod-resource-group
   azure_tags     = var.azure_tags
   azure_location = var.azure_location
   google_api_key = var.google_api_key
