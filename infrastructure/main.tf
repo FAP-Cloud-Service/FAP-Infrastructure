@@ -20,8 +20,8 @@ module "secrets" {
   azure_tags     = var.azure_tags
 }
 
-resource "azurerm_resource_group" "fap-backend-resource-group" {
-  name     = "fap-backend-application"
+resource "azurerm_resource_group" "fap-prod-resource-group" {
+  name     = "fap-prod-application"
   location = var.azure_location
   tags = var.azure_tags
 }
