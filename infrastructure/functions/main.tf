@@ -56,7 +56,7 @@ data "azurerm_storage_account_sas" "fap-backend-storage-account-sas" {
 resource "azurerm_app_service_plan" "fap-backend-service-plan" {
   name                = "fap-backend-service-plan"
   location            = var.prod_resource_group.location
-  resource_group_name = var.prod_resource_group.fap-backend-resource-group.name
+  resource_group_name = var.prod_resource_group.name
   kind                = "functionapp"
   tags = var.azure_tags
   sku {
@@ -67,8 +67,8 @@ resource "azurerm_app_service_plan" "fap-backend-service-plan" {
 
 resource "azurerm_function_app" "fap-backend-function-app" {
   name                       = "fap-backend-function-app"
-  location                   = var.prod_resource_group.fap-backend-resource-group.location
-  resource_group_name        = var.prod_resource_group.fap-backend-resource-group.name
+  location                   = var.prod_resource_group.location
+  resource_group_name        = var.prod_resource_group.name
   app_service_plan_id        = azurerm_app_service_plan.fap-backend-service-plan.id
   storage_account_name       = azurerm_storage_account.fap-backend-storage-account.name
   storage_account_access_key = azurerm_storage_account.fap-backend-storage-account.primary_access_key
@@ -84,3 +84,4 @@ resource "azurerm_function_app" "fap-backend-function-app" {
     WEBSITE_RUN_FROM_PACKAGE   = "https://${azurerm_storage_account.fap-backend-storage-account.name}.blob.core.windows.net/${azurerm_storage_container.fap-backend-storage-container.name}/${azurerm_storage_blob.fap-backend-storage-blob.name}${data.azurerm_storage_account_sas.fap-backend-storage-account-sas.sas}"
   }
 }
+
