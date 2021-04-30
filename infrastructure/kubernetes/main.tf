@@ -7,8 +7,8 @@ resource "azurerm_kubernetes_cluster" "fap-frontend-application-kubernetes-clust
 
   default_node_pool {
     name                = "default"
-    max_count           = 1
-    min_count           = 3
+    max_count           = 3
+    min_count           = 1
     max_pods            = 2
     vm_size             = "Standard_B1S"
     type                = "VirtualMachineScaleSets"
