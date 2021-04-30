@@ -35,10 +35,16 @@ resource "azurerm_key_vault_access_policy" "fap-user-access-policy" {
   ]
 }
 
-resource "azurerm_key_vault_secret" "kubernetes-secret" {
-  for_each     = var.fap_kubernetes_secrets
-  name         = each.key
-  value        = each.value
+resource "azurerm_key_vault_secret" "kubernetes-client-certificate" {
+  name         = "kubernetes-client-certificate"
+  value        = var.fap_kubernetes_secrets.kubernetes-client-certificate
+  key_vault_id = azurerm_key_vault.fap-key-vault.id
+  tags = var.azure_tags
+}
+
+resource "azurerm_key_vault_secret" "kubernetes-config-raw" {
+  name         = "kubernetes-config-raw"
+  value        = var.fap_kubernetes_secrets.kubernetes-config-raw
   key_vault_id = azurerm_key_vault.fap-key-vault.id
   tags = var.azure_tags
 }

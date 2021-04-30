@@ -84,3 +84,4 @@ resource "azurerm_function_app" "fap-backend-function-app" {
     WEBSITE_RUN_FROM_PACKAGE   = "https://${azurerm_storage_account.fap-backend-storage-account.name}.blob.core.windows.net/${azurerm_storage_container.fap-backend-storage-container.name}/${azurerm_storage_blob.fap-backend-storage-blob.name}${data.azurerm_storage_account_sas.fap-backend-storage-account-sas.sas}"
   }
 }
+
