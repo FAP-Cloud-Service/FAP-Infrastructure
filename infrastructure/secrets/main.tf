@@ -29,10 +29,31 @@ resource "azurerm_key_vault_access_policy" "fap-user-access-policy" {
   secret_permissions = [
     "set",
     "get",
-    "delete",
+    "Delete",
     "purge",
-    "recover"
+    "recover",
+    "list",
+    "Backup",
+    "restore"
   ]
+
+  certificate_permissions = [
+  "Backup",
+  "Create",
+  "Delete",
+  "DeleteIssuers",
+  "Get",
+  "GetIssuers",
+  "Import",
+  "List",
+  "ListIssuers",
+  "ManageContacts",
+  "ManageIssuers",
+  "Purge",
+  "Recover",
+  "Restore",
+  "SetIssuers",
+  "Update"]
 }
 
 resource "azurerm_key_vault_secret" "kubernetes-client-certificate" {
