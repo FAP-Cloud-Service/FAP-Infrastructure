@@ -4,7 +4,7 @@ resource "azurerm_storage_account" "fap-backend-storage-account" {
   location                 = var.prod_resource_group.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  tags = var.azure_tags
+  tags                     = var.azure_tags
 }
 
 resource "azurerm_storage_container" "fap-backend-storage-container" {
@@ -58,7 +58,7 @@ resource "azurerm_app_service_plan" "fap-backend-service-plan" {
   location            = var.prod_resource_group.location
   resource_group_name = var.prod_resource_group.name
   kind                = "functionapp"
-  tags = var.azure_tags
+  tags                = var.azure_tags
   sku {
     tier = "Dynamic"
     size = "Y1"

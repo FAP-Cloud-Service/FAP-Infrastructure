@@ -29,22 +29,43 @@ resource "azurerm_key_vault_access_policy" "fap-user-access-policy" {
   secret_permissions = [
     "set",
     "get",
-    "delete",
+    "Delete",
     "purge",
-    "recover"
+    "recover",
+    "list",
+    "Backup",
+    "restore"
   ]
+
+  certificate_permissions = [
+  "Backup",
+  "Create",
+  "Delete",
+  "DeleteIssuers",
+  "Get",
+  "GetIssuers",
+  "Import",
+  "List",
+  "ListIssuers",
+  "ManageContacts",
+  "ManageIssuers",
+  "Purge",
+  "Recover",
+  "Restore",
+  "SetIssuers",
+  "Update"]
 }
 
 resource "azurerm_key_vault_secret" "kubernetes-client-certificate" {
   name         = "kubernetes-client-certificate"
   value        = var.fap_kubernetes_secrets.kubernetes-client-certificate
   key_vault_id = azurerm_key_vault.fap-key-vault.id
-  tags = var.azure_tags
+  tags         = var.azure_tags
 }
 
 resource "azurerm_key_vault_secret" "kubernetes-config-raw" {
   name         = "kubernetes-config-raw"
   value        = var.fap_kubernetes_secrets.kubernetes-config-raw
   key_vault_id = azurerm_key_vault.fap-key-vault.id
-  tags = var.azure_tags
+  tags         = var.azure_tags
 }
