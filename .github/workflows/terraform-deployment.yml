@@ -4,13 +4,14 @@ on:
   push:
     branches:
     - main
+  workflow_dispatch:
 
 jobs:
   plan:
     name: Terraform plan
     runs-on: ubuntu-latest
     env:
-      function_zip_path: "fap-server-${GITHUB_SHA::8}.zip"
+      sha8: ${GITHUB_SHA::8}
 
     steps:
     - name: Checkout
@@ -25,7 +26,7 @@ jobs:
       run: curl -sLO https://github.com/fap-cloud-service/fap-backend/releases/latest/download/friends-and-places-server.zip
 
     - name: Rename backend zip
-      run: mv friends-and-places-server.zip ${function_zip_path}
+      run: mv friends-and-places-server.zip fap-backend-${{ env.sha8 }}.zip
 
     - name: Terraform init and plan
       env:
@@ -35,7 +36,7 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       run: |
         terraform init
-        terraform plan -input=false -var="google_api_key=${{ secrets.TF_VAR_google_api_key }}" -var="function_zip_path=${function_zip_path}" -out=plan.tfplan
+        terraform plan -input=false -var="google_api_key=${{ secrets.TF_VAR_google_api_key }}" -var="function_zip_path=fap-backend-${{ env.sha8 }}.zip" -out=plan.tfplan
 
     - name: Upload terraform plan file
       uses: actions/upload-artifact@v2
@@ -51,7 +52,7 @@ jobs:
     environment: production
     needs: plan
     env:
-      function_zip_path: "fap-server-${GITHUB_SHA::8}.zip"
+      sha8: ${GITHUB_SHA::8}
 
     steps:
     - name: Checkout
@@ -66,7 +67,7 @@ jobs:
       run: curl -sLO https://github.com/fap-cloud-service/fap-backend/releases/latest/download/friends-and-places-server.zip
 
     - name: Rename backend zip
-      run: mv friends-and-places-server.zip ${function_zip_path}
+      run: mv friends-and-places-server.zip fap-backend-${{ env.sha8 }}.zip
 
     - name: Download terraform plan file
       uses: actions/download-artifact@v2
