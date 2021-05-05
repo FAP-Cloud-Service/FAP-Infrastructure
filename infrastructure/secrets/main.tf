@@ -18,7 +18,7 @@ data "azuread_users" "users" {
 resource "azurerm_key_vault_access_policy" "fap-user-access-policy" {
   key_vault_id = azurerm_key_vault.fap-key-vault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  for_each     = toset(data.azuread_users.users.object_ids)
+  for_each     = toset(concat(data.azuread_users.users.object_ids, [data.azurerm_client_config.current.object_id]))
   object_id    = each.value
 
   key_permissions = [
