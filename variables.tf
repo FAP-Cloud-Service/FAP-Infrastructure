@@ -8,6 +8,10 @@ variable "google_api_key" {
   sensitive = true
 }
 
+variable "function_zip_path" {
+  description = "Path to local zip containing the function"
+}
+
 variable "azure_tags" {
   type = map(any)
   default = {
